@@ -1,7 +1,7 @@
 <template>
 <banner-component
   mode="square"
-  carousel-on-mobile="false"
+  :carouselOnMobile="false"
   :items="[
 		{
 			type: 'image',
@@ -28,7 +28,7 @@
 
 <banner-component
   mode="square"
-  carousel-on-mobile="true"
+  :carouselOnMobile="true"
   :items="[
     {
 			type: 'cta',
@@ -74,7 +74,7 @@
 
 <banner-component
   mode="rectangle"
-  carousel-on-mobile="false"
+  :carouselOnMobile="false"
   :items="[
 		{
 			type: 'image',
@@ -106,7 +106,8 @@ import BannerComponent from './components/banner-component.vue'
 export default {
   name: 'App',
   components: {
-    BannerComponent
+    BannerComponent,
+
   }
 }
 </script>

@@ -1,32 +1,71 @@
 <template>
-        <div :class="[ mode == 'square' ? 'Banner banner-square' : 'Banner banner-rectangular']">
-            <div v-for="item in items" :key="item" class="bannerItem"
-                :class="[ (mode=='rectangle' && item.aspectRatio=='rectangle') ? 'with-img-desktop' :
-                          (mode=='rectangle' && item.aspectRatio=='square') ? 'with-img-mobile' :
-                          (mode=='square' && item.aspectRatio=='square') ? 'default' : '']" >
+        <div :class="[ mode == 'square' ? 'Banner banner-square' : 'Banner banner-rectangular']" 
+             :style="[(carouselOnMobile == true && mobileDevice == true) ? {display: 'none'} : {display: 'grid'}]">
 
-                <a :href="item.link">
-                    <img v-if="item.type=='image'" 
-                        :src="item.src">
+              <div v-for="item in items" :key="item" class="bannerItem"
+                  :class="[ 
+                            (mode=='rectangle' && item.aspectRatio=='rectangle') ? 'with-img-desktop' :
+                            (mode=='rectangle' && item.aspectRatio=='square') ? 'with-img-mobile' :
+                            (mode=='square' && item.aspectRatio=='square') ? 'default-img' : '']" >
 
-                    <div v-else class="cta">
-                        <span>{{item.title}}</span>
-                        <button>{{item.button}}</button>
-                    </div>
+                  <a :href="item.link">
+                      <img v-if="item.type=='image'" 
+                          :src="item.src">
 
-                </a>
-            </div>
+                      <div v-else class="cta">
+                          <span>{{item.title}}</span>
+                          <button>{{item.button}}</button>
+                      </div>
+                  </a>
+              </div>
+
         </div>
+        
+        <div v-if="carouselOnMobile == true && mobileDevice == true"  class="Banner banner-square">
+            <Splide :options="{ rewind: true }">
+                <SplideSlide v-for="item in items" :key="item" class="bannerItem">
+                    <img v-if="item.type=='image'" :src="item.src">
+                </SplideSlide>
+            </Splide>
+        </div>
+
+
 </template>
 
+
+
 <script>
+//import CarouselOnMobile from './CarouselOnMobile.vue';
 export default {
   name: 'Banner',
+  //components : { CarouselOnMobile },
   props: {
     mode: String,
     items: Array,
-    "carousel-on-mobile" : Boolean
+    carouselOnMobile : Boolean
   },
+
+  
+  data() {
+    return {
+      mobileDevice: {
+        type:Boolean,
+        default: null
+      }
+    }
+  },
+  methods:{
+    resize : function(){
+          window.addEventListener('resize', function(){
+            this.mobileDevice = true
+          });
+    }
+  },
+  mounted(){
+    if(window.innerWidth < 767){
+      this.mobileDevice = true
+    }
+  }
 }
 </script>
 
