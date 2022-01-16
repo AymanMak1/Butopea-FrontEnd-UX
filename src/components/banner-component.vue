@@ -20,7 +20,6 @@
               </div>
 
         </div>
-        
         <div v-if="carouselOnMobile == true && mobileDevice == true"  class="Banner banner-square">
             <Splide :options="{ rewind: true }">
                 <SplideSlide v-for="item in items" :key="item" class="bannerItem">
