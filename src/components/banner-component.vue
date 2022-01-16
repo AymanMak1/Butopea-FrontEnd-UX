@@ -1,30 +1,32 @@
 <template>
+
         <div :class="[ mode == 'square' ? 'Banner banner-square' : 'Banner banner-rectangular']" 
              :style="[(carouselOnMobile == true && mobileDevice == true) ? {display: 'none'} : {display: 'grid'}]">
-
               <div v-for="item in items" :key="item" class="bannerItem"
                   :class="[ 
-                            (mode=='rectangle' && item.aspectRatio=='rectangle') ? 'with-img-desktop' :
-                            (mode=='rectangle' && item.aspectRatio=='square') ? 'with-img-mobile' :
-                            (mode=='square' && item.aspectRatio=='square') ? 'default-img' : '']" >
-
-                  <a :href="item.link">
-                      <img v-if="item.type=='image'" 
-                          :src="item.src">
-
-                      <div v-else class="cta">
-                          <span>{{item.title}}</span>
-                          <button>{{item.button}}</button>
-                      </div>
-                  </a>
+                    (mode=='rectangle' && item.aspectRatio=='rectangle') ? 'with-img-desktop' :
+                    (mode=='rectangle' && item.aspectRatio=='square') ? 'with-img-mobile' :
+                    (mode=='square' && item.aspectRatio=='square') ? 'default-img' : '']" >
+                          <a :href="item.link">
+                              <img v-if="item.type=='image'" 
+                                  :src="item.src">
+                              <div v-else class="cta">
+                                  <span>{{item.title}}</span>
+                                  <button>{{item.button}}</button>
+                              </div>
+                          </a>
               </div>
-
         </div>
+
         <div v-if="carouselOnMobile == true && mobileDevice == true"  class="Banner banner-square">
+            <div class="cta">
+                  <span>{{this.bannerMobileCarouselCta().title}}</span>
+                  <button>{{this.bannerMobileCarouselCta().button}}</button>
+            </div>
             <Splide :options="{ rewind: true }">
-                <SplideSlide v-for="item in items" :key="item" class="bannerItem">
-                    <img v-if="item.type=='image'" :src="item.src">
-                </SplideSlide>
+                  <SplideSlide v-for="item in this.bannerMobileCarouselImgs()" :key="item" class="bannerItem">
+                        <img  :src="item.src">
+                  </SplideSlide>
             </Splide>
         </div>
 
@@ -53,18 +55,28 @@ export default {
       }
     }
   },
+
   methods:{
     resize : function(){
           window.addEventListener('resize', function(){
             this.mobileDevice = true
           });
+    },
+    bannerMobileCarouselImgs: function(){
+      return this.items.filter(item => item.type === 'image')
+    },
+    bannerMobileCarouselCta: function(){
+      let ctaItem = this.items.filter(item => item.type === 'cta')
+      return ctaItem[0]
     }
   },
+
   mounted(){
     if(window.innerWidth < 767){
       this.mobileDevice = true
     }
   }
+
 }
 </script>
 

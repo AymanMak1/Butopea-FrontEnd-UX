@@ -107,7 +107,6 @@ export default {
   name: 'App',
   components: {
     BannerComponent,
-
   }
 }
 </script>
